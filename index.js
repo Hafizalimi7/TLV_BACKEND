@@ -7,24 +7,21 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
 const transporter = nodemailer.createTransport({
-  host: "live.smtp.mailtrap.io",
-  port: 587,
+  host: process.env.SMTP_HOST, // cPanel SMTP server
+  port: 465, // Use 465 for SSL or 587 for TLS
+  secure: true, // Set to true for port 465 (SSL)
   auth: {
-    user: "api",
-    pass: process.env.PASS
+    user: process.env.EMAIL, // Your cPanel email
+    pass: process.env.PASS, // Your cPanel email password
   },
-  debug: true,
-  logger: true,
 });
-
 
 app.post('/send-email', async (req, res) => {
   const mailOptions = {
-    from: "hello@demomailtrap.com", // Sender address
-    to: process.env.EMAIL,                      // Recipient's address
-    subject: "New Contact Form Submission", //
+    from: process.env.EMAIL, // Must match authenticated user
+    to: ['info@thelifevoyage.com', process.env.EMAIL], // Recipient's address
+    subject: "New Contact Form Submission",
     text: `Hello Team,
 
 You have received a new contact form submission. Below are the details:
@@ -39,9 +36,7 @@ Please review the submission and follow up as needed.
 
 Best regards,  
 Your Website Support Team`
-
-    ,                    // Email body text
-        };
+  };
 
   try {
     await transporter.sendMail(mailOptions);
