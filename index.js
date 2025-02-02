@@ -59,7 +59,7 @@ Thank you for your payment of £${(req.body.amount / 100).toFixed(2)}. We truly 
 As of now, the remaining balance on your account is [remaining amount]. For your next payment, which is the second installment, kindly send a bank transfer to the following account details:
 
 Bank Transfer Details
- Name: H Aasdsmi
+Name: H Aasdsmi
 Sort Code: 123234
 Account Number: 424334
 Reference: [First 3 letters of First Name][First 3 letters of Last Name] (e.g., Max Pay)
