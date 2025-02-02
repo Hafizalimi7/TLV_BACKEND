@@ -47,6 +47,42 @@ Your Website Support Team`
   }
 });
 
+app.post('/confirmation', async (req, res) => {
+  const mailOptions = {
+    from: process.env.EMAIL, // Must match authenticated user
+    to: ['info@thelifevoyage.com', process.env.EMAIL, req.body.customerEmail], // Recipient's address
+    subject: "Payment Confirmation and Next Steps",
+    text: `Dear ${req.body.customerName},
+
+Thank you for your payment of £${(req.body.amount / 100).toFixed(2)}. We truly appreciate your promptness in settling this portion of your balance.
+
+As of now, the remaining balance on your account is [remaining amount]. For your next payment, which is the second installment, kindly send a bank transfer to the following account details:
+
+Bank Transfer Details
+ Name: H Aasdsmi
+Sort Code: 123234
+Account Number: 424334
+Reference: [First 3 letters of First Name][First 3 letters of Last Name] (e.g., Max Pay)
+
+It is important to include the reference [AbcTda] when making your payment to help us track it effectively.
+
+If you have any questions or need assistance, feel free to reach out to us at info@thelifevoyage.com
+
+Thank you once again for choosing our services.
+
+Warm regards,
+The Life Voyage Team`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).send('Email sent successfully!');
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).send('Failed to send email.');
+  }
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
